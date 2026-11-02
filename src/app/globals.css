@@ -13,3 +13,7 @@ body {
   background: #ffffff;
   color: var(--color-ink);
 }
+
+html:has(dialog[open]) {
+  overflow: hidden;
+}
