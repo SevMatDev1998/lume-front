@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Inter, Noto_Sans_Armenian } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin", "cyrillic"],
+});
+
+const notoArmenian = Noto_Sans_Armenian({
+  variable: "--font-armenian",
+  subsets: ["armenian"],
 });
 
 export const metadata: Metadata = {
@@ -17,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
+    <html lang="en" className={`${inter.variable} ${notoArmenian.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
