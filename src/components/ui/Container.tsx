@@ -1,0 +1,6 @@
+import { ComponentProps } from "react";
+import { cn } from "@/utils/cn";
+
+export const Container = ({ className, ...props }: ComponentProps<"div">) => (
+  <div className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)} {...props} />
+);
