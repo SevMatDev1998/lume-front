@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { catalogSectionRoute, RouteEnum } from "@/enums/route.enum";
 import { Badge, Button, ButtonLink, Container, Placeholder } from "@/components/ui";
 import { OrderButton } from "@/components/product/OrderButton";
+import { LIGHT_MODELS, LOUPE_MODELS } from "@/constants/catalog";
 
 const MAGNIFICATIONS = ["4.0x", "5.0x", "6.0x", "7.0x"];
 const SPECS = [
@@ -11,6 +12,13 @@ const SPECS = [
   ["Declination", "up to 40°"],
   ["Protection", "BLP"],
 ];
+
+export function generateStaticParams() {
+  return [
+    ...LOUPE_MODELS.map((model) => ({ section: "loupes", slug: model.slug })),
+    ...LIGHT_MODELS.map((model) => ({ section: "lights", slug: model.slug })),
+  ];
+}
 
 const ProductContent = async ({ params }: Pick<PageProps<"/catalog/[section]/[slug]">, "params">) => {
   const { section, slug } = await params;

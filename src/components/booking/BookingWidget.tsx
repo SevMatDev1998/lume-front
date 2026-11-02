@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useSyncExternalStore } from "react";
 import { BOOKING_DAYS_AHEAD, BOOKING_DURATION, BOOKING_SLOTS, VISIT_PURPOSES, VISIT_TYPES } from "@/constants/booking";
 import { Button, Field, Input, Select, Textarea } from "@/components/ui";
 import {
@@ -11,6 +11,7 @@ import {
   isWeekend,
   monthGrid,
   startOfMonth,
+  todayKey,
   toKey,
 } from "@/utils/calendar";
 import { cn } from "@/utils/cn";
@@ -19,7 +20,18 @@ const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 type Step = "pick" | "details" | "done";
 
-export const BookingWidget = ({ today }: { today: string }) => {
+const subscribeToNothing = () => () => {};
+
+export const BookingCalendar = () => {
+  const today = useSyncExternalStore(subscribeToNothing, todayKey, () => null);
+  return today ? (
+    <BookingWidget today={today} />
+  ) : (
+    <div className="min-h-[480px] rounded-2xl border border-line bg-soft" />
+  );
+};
+
+const BookingWidget = ({ today }: { today: string }) => {
   const firstDay = addDays(fromKey(today), 1);
   const lastDay = addDays(firstDay, BOOKING_DAYS_AHEAD);
   const [month, setMonth] = useState(startOfMonth(firstDay));
