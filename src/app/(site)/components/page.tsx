@@ -186,7 +186,7 @@ export default function ComponentsPage() {
           </Group>
           <Group title="Link and modal">
             <ButtonLink href={RouteEnum.CATALOG}>ButtonLink</ButtonLink>
-            <OrderButton productName="Kepler Advanced 5.0x" />
+            <OrderButton productSlug="kepler-advanced" productName="Kepler Advanced" selection="5.0x" />
           </Group>
         </div>
       </ContentSection>

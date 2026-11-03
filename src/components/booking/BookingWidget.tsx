@@ -1,8 +1,13 @@
 "use client";
 
 import { FormEvent, useState, useSyncExternalStore } from "react";
-import { BOOKING_DAYS_AHEAD, BOOKING_DURATION, BOOKING_SLOTS, VISIT_PURPOSES, VISIT_TYPES } from "@/constants/booking";
-import { Button, Field, Input, Select, Textarea } from "@/components/ui";
+import toast from "react-hot-toast";
+import RouteEnum from "@/enums/route.enum";
+import { BOOKING_DURATION, BOOKING_UTC_OFFSET, VISIT_PURPOSES, VISIT_TYPES } from "@/constants/booking";
+import { Button, ButtonLink, Field, Select, Textarea } from "@/components/ui";
+import { useCreateBookingMutation, useGetBusySlotsQuery, useGetScheduleQuery } from "@/services/booking/booking.service";
+import useAuth from "@/hooks/useAuth";
+import { BookingSchedule, VisitPurpose, VisitType } from "@/types";
 import {
   addDays,
   BOOKING_TIME_ZONE,
@@ -15,6 +20,8 @@ import {
   toKey,
 } from "@/utils/calendar";
 import { cn } from "@/utils/cn";
+import { getApiErrorMessage } from "@/utils/utils";
+import { loginRoute } from "@/utils/redirect";
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -22,32 +29,65 @@ type Step = "pick" | "details" | "done";
 
 const subscribeToNothing = () => () => {};
 
+const slotStart = (date: string, time: string) => `${date}T${time}:00${BOOKING_UTC_OFFSET}`;
+
+const Message = ({ children }: { children: React.ReactNode }) => (
+  <div className="flex min-h-[480px] items-center justify-center rounded-2xl border border-line bg-soft p-6 text-center text-sm text-muted">
+    {children}
+  </div>
+);
+
 export const BookingCalendar = () => {
   const today = useSyncExternalStore(subscribeToNothing, todayKey, () => null);
-  return today ? (
-    <BookingWidget today={today} />
-  ) : (
-    <div className="min-h-[480px] rounded-2xl border border-line bg-soft" />
-  );
+  const { data: schedule, isError } = useGetScheduleQuery();
+
+  if (isError) return <Message>Online booking is not available right now. Call us at +374 77 210119.</Message>;
+  if (!today || !schedule) return <Message>Loading…</Message>;
+
+  return <BookingWidget today={today} schedule={schedule} />;
 };
 
-const BookingWidget = ({ today }: { today: string }) => {
+const BookingWidget = ({ today, schedule }: { today: string; schedule: BookingSchedule }) => {
+  const { status, user } = useAuth();
   const firstDay = addDays(fromKey(today), 1);
-  const lastDay = addDays(firstDay, BOOKING_DAYS_AHEAD);
+  const lastDay = addDays(firstDay, schedule.daysAhead);
   const [month, setMonth] = useState(startOfMonth(firstDay));
-  const [visitType, setVisitType] = useState(VISIT_TYPES[0].value);
+  const [visitType, setVisitType] = useState<VisitType>(VISIT_TYPES[0].value);
   const [date, setDate] = useState<string>();
   const [time, setTime] = useState<string>();
   const [step, setStep] = useState<Step>("pick");
 
+  const { data: busy = [], refetch: refetchBusy } = useGetBusySlotsQuery({
+    from: slotStart(toKey(firstDay), "00:00"),
+    to: slotStart(toKey(addDays(lastDay, 1)), "00:00"),
+  });
+  const [createBooking, { isLoading }] = useCreateBookingMutation();
+
+  const busyTimes = new Set(busy.map((value) => new Date(value).getTime()));
+  const isBusy = (day: string, slot: string) => busyTimes.has(new Date(slotStart(day, slot)).getTime());
   const isAvailable = (day: Date) => day >= firstDay && day <= lastDay && !isWeekend(day);
   const canGoBack = month > startOfMonth(firstDay);
   const canGoForward = startOfMonth(month, 1) <= lastDay;
   const selectedLabel = date && formatDate(fromKey(date), { weekday: "long", day: "numeric", month: "long" });
 
-  const submit = (event: FormEvent) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setStep("done");
+    if (!date || !time) return;
+    const form = new FormData(event.currentTarget);
+    try {
+      await createBooking({
+        startsAt: new Date(slotStart(date, time)).toISOString(),
+        visitType,
+        purpose: form.get("purpose") as VisitPurpose,
+        comment: form.get("comment")?.toString().trim() || undefined,
+      }).unwrap();
+      setStep("done");
+    } catch (error) {
+      toast.error(getApiErrorMessage(error));
+      refetchBusy();
+      setTime(undefined);
+      setStep("pick");
+    }
   };
 
   if (step === "done") {
@@ -58,6 +98,9 @@ const BookingWidget = ({ today }: { today: string }) => {
         <p className="text-muted">
           {selectedLabel}, {time}. We will call you to confirm.
         </p>
+        <ButtonLink href={RouteEnum.ACCOUNT} variant="outline">
+          My visits
+        </ButtonLink>
       </div>
     );
   }
@@ -160,18 +203,23 @@ const BookingWidget = ({ today }: { today: string }) => {
               <>
                 <h3 className="mb-4 font-semibold">{formatDate(fromKey(date), { weekday: "short", day: "numeric" })}</h3>
                 <div className="grid grid-cols-3 gap-2 lg:grid-cols-1">
-                  {BOOKING_SLOTS.map((slot) => (
-                    <button
-                      key={slot}
-                      onClick={() => setTime(slot)}
-                      className={cn(
-                        "rounded-lg border py-2.5 text-sm font-medium transition-colors",
-                        slot === time ? "border-ink bg-ink text-white" : "border-line hover:border-ink",
-                      )}
-                    >
-                      {slot}
-                    </button>
-                  ))}
+                  {schedule.slots.map((slot) => {
+                    const taken = isBusy(date, slot);
+                    return (
+                      <button
+                        key={slot}
+                        disabled={taken}
+                        onClick={() => setTime(slot)}
+                        className={cn(
+                          "rounded-lg border py-2.5 text-sm font-medium transition-colors",
+                          slot === time ? "border-ink bg-ink text-white" : "border-line hover:border-ink",
+                          taken && "border-line text-muted/50 line-through hover:border-line",
+                        )}
+                      >
+                        {slot}
+                      </button>
+                    );
+                  })}
                 </div>
                 <Button onClick={() => setStep("details")} disabled={!time} block className="mt-4">
                   Next
@@ -183,35 +231,44 @@ const BookingWidget = ({ today }: { today: string }) => {
           </section>
         </>
       ) : (
-        <form onSubmit={submit} className="flex flex-col gap-4 p-6 lg:col-span-2">
+        <div className="flex flex-col gap-4 p-6 lg:col-span-2">
           <button type="button" onClick={() => setStep("pick")} className="w-max text-sm text-muted hover:text-ink">
             ← Change time
           </button>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="First name">
-              <Input name="firstName" required />
-            </Field>
-            <Field label="Last name">
-              <Input name="lastName" required />
-            </Field>
-            <Field label="Phone">
-              <Input name="phone" type="tel" required />
-            </Field>
-            <Field label="Reason">
-              <Select name="purpose">
-                {VISIT_PURPOSES.map((purpose) => (
-                  <option key={purpose}>{purpose}</option>
-                ))}
-              </Select>
-            </Field>
-          </div>
-          <Field label="Comment">
-            <Textarea name="comment" placeholder="Clinic address, what you want to try on…" />
-          </Field>
-          <Button type="submit" className="sm:w-max">
-            Confirm visit
-          </Button>
-        </form>
+          {status === "user" ? (
+            <form onSubmit={submit} className="flex flex-col gap-4">
+              <p className="rounded-lg bg-soft p-4 text-sm">
+                We will call {user?.firstName ?? "you"}
+                {user?.phone && ` at ${user.phone}`} to confirm the visit.
+              </p>
+              <Field label="Reason">
+                <Select name="purpose">
+                  {VISIT_PURPOSES.map((purpose) => (
+                    <option key={purpose.value} value={purpose.value}>
+                      {purpose.label}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+              <Field label="Comment">
+                <Textarea name="comment" maxLength={1000} placeholder="Clinic address, what you want to try on…" />
+              </Field>
+              <Button type="submit" className="sm:w-max" disabled={isLoading}>
+                {isLoading ? "Booking…" : "Confirm visit"}
+              </Button>
+            </form>
+          ) : (
+            <div className="flex flex-col items-start gap-3 rounded-lg bg-soft p-6 text-sm">
+              <p>Log in or create an account to book the visit. It takes a minute.</p>
+              <div className="flex flex-wrap gap-2">
+                <ButtonLink href={loginRoute(RouteEnum.BOOKING)}>Log in</ButtonLink>
+                <ButtonLink href={RouteEnum.REGISTER} variant="outline">
+                  Sign up
+                </ButtonLink>
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

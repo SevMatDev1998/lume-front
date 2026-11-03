@@ -25,3 +25,7 @@ export const monthGrid = (month: Date) => {
 
 export const formatDate = (date: Date, options: Intl.DateTimeFormatOptions) =>
   date.toLocaleDateString("en-US", { ...options, timeZone: "UTC" });
+
+const DATE_TIME = new Intl.DateTimeFormat("en-GB", { timeZone: BOOKING_TIME_ZONE, dateStyle: "medium", timeStyle: "short" });
+
+export const formatDateTime = (value: string) => DATE_TIME.format(new Date(value));

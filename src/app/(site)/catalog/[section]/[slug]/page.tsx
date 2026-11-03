@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { catalogSectionRoute, RouteEnum } from "@/enums/route.enum";
-import { Badge, Button, ButtonLink, Container, Placeholder } from "@/components/ui";
+import { Badge, Button, ButtonLink, Chip, Container, Placeholder } from "@/components/ui";
 import { OrderButton } from "@/components/product/OrderButton";
 import { LIGHT_MODELS, LOUPE_MODELS } from "@/constants/catalog";
 
-const MAGNIFICATIONS = ["4.0x", "5.0x", "6.0x", "7.0x"];
 const SPECS = [
   ["Weight", "49 g"],
   ["Working distance", "31–69 cm"],
@@ -22,7 +21,10 @@ export function generateStaticParams() {
 
 const ProductContent = async ({ params }: Pick<PageProps<"/catalog/[section]/[slug]">, "params">) => {
   const { section, slug } = await params;
-  const name = slug.replace(/-/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+  const loupe = LOUPE_MODELS.find((model) => model.slug === slug);
+  const product = loupe ?? LIGHT_MODELS.find((model) => model.slug === slug);
+  const name = product?.name ?? slug;
+  const magnifications = loupe?.magnifications ?? [];
 
   return (
     <Container className="py-8">
@@ -42,19 +44,25 @@ const ProductContent = async ({ params }: Pick<PageProps<"/catalog/[section]/[sl
         <div className="flex flex-col gap-5">
           <Badge>ExamVision</Badge>
           <h1 className="text-3xl font-semibold">{name}</h1>
-          <p className="text-muted">Product description from the API.</p>
-          <div>
-            <p className="mb-2 text-xs tracking-wider text-muted uppercase">Magnification</p>
-            <div className="flex flex-wrap gap-2">
-              {MAGNIFICATIONS.map((magnification) => (
-                <Button key={magnification} variant="outline" size="sm">
-                  {magnification}
-                </Button>
-              ))}
+          {product?.description && <p className="text-muted">{product.description}</p>}
+          {magnifications.length > 0 && (
+            <div>
+              <p className="mb-2 text-xs tracking-wider text-muted uppercase">Magnification</p>
+              <div className="flex flex-wrap gap-2">
+                {magnifications.map((magnification) => (
+                  <Chip key={magnification} className="px-3 py-1 text-sm">
+                    {magnification}
+                  </Chip>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
           <div className="flex flex-wrap gap-3">
-            <OrderButton productName={name} />
+            <OrderButton
+              productSlug={slug}
+              productName={name}
+              options={magnifications.length ? { label: "Magnification", values: magnifications } : undefined}
+            />
             <ButtonLink href={RouteEnum.CONFIGURATOR} variant="outline">
               Configure in 3D
             </ButtonLink>

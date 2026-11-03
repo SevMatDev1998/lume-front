@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import RouteEnum from "@/enums/route.enum";
 import { cn } from "@/utils/cn";
+import ApiInstance from "@/api/api";
+import useAppDispatch from "@/hooks/useAppDispatch";
+import { logOut } from "@/store/slices/auth.slice";
 
 const ITEMS = [
   { href: RouteEnum.ACCOUNT, label: "My orders" },
@@ -12,6 +15,14 @@ const ITEMS = [
 
 export const AccountNav = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const handleLogOut = () => {
+    dispatch(logOut());
+    dispatch(ApiInstance.util.resetApiState());
+    router.push(RouteEnum.HOME);
+  };
 
   return (
     <nav className="flex gap-2 overflow-x-auto lg:flex-col">
@@ -27,7 +38,9 @@ export const AccountNav = () => {
           {item.label}
         </Link>
       ))}
-      <button className="rounded-lg px-3 py-2 text-left text-sm text-muted hover:text-ink">Log out</button>
+      <button onClick={handleLogOut} className="rounded-lg px-3 py-2 text-left text-sm text-muted hover:text-ink">
+        Log out
+      </button>
     </nav>
   );
 };

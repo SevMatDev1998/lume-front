@@ -4,7 +4,7 @@ export const PROFESSIONS = [
   { value: "SURGEON", label: "Surgeon" },
   { value: "STUDENT", label: "Student" },
   { value: "OTHER", label: "Other" },
-];
+] as const;
 
 export const PROFESSION_AUDIENCES = [
   {

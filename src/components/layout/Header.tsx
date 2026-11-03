@@ -2,6 +2,7 @@ import Link from "next/link";
 import RouteEnum from "@/enums/route.enum";
 import { ButtonLink, Container } from "@/components/ui";
 import { Logo } from "./Logo";
+import { AuthLink } from "./AuthLink";
 import { MobileMenu } from "./MobileMenu";
 import { NavDropdown } from "./NavDropdown";
 import { DROPDOWN_NAV, MAIN_NAV } from "./navigation";
@@ -21,9 +22,7 @@ export const Header = () => (
         ))}
       </nav>
       <div className="hidden items-center gap-4 lg:flex">
-        <Link href={RouteEnum.LOGIN} className="text-sm underline-offset-4 hover:underline">
-          Log in
-        </Link>
+        <AuthLink className="text-sm underline-offset-4 hover:underline" />
         <ButtonLink href={RouteEnum.BOOKING} size="sm">
           Book a visit
         </ButtonLink>

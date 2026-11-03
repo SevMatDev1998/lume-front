@@ -4,11 +4,13 @@ import Link from "next/link";
 import { MouseEvent, useRef } from "react";
 import RouteEnum from "@/enums/route.enum";
 import { ButtonLink } from "@/components/ui";
+import useAuth from "@/hooks/useAuth";
 import { Logo } from "./Logo";
 import { DROPDOWN_NAV, MAIN_NAV } from "./navigation";
 
 export const MobileMenu = () => {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const { status } = useAuth();
 
   const closeOnLinkClick = (event: MouseEvent) => {
     if (event.target instanceof Element && event.target.closest("a")) dialogRef.current?.close();
@@ -70,14 +72,20 @@ export const MobileMenu = () => {
             <ButtonLink href={RouteEnum.BOOKING} block>
               Book a visit
             </ButtonLink>
-            <div className="grid grid-cols-2 gap-2">
-              <ButtonLink href={RouteEnum.LOGIN} variant="outline" block>
-                Log in
+            {status === "user" ? (
+              <ButtonLink href={RouteEnum.ACCOUNT} variant="outline" block>
+                My account
               </ButtonLink>
-              <ButtonLink href={RouteEnum.REGISTER} variant="outline" block>
-                Sign up
-              </ButtonLink>
-            </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-2">
+                <ButtonLink href={RouteEnum.LOGIN} variant="outline" block>
+                  Log in
+                </ButtonLink>
+                <ButtonLink href={RouteEnum.REGISTER} variant="outline" block>
+                  Sign up
+                </ButtonLink>
+              </div>
+            )}
           </div>
         </nav>
       </dialog>

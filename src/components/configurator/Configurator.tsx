@@ -85,7 +85,11 @@ export const Configurator = () => {
         </OptionGroup>
 
         <div className="flex flex-col gap-3 py-5">
-          <OrderButton productName={`${loupe.name} ${magnification} · ${frame.name} frame, ${color.name}`} />
+          <OrderButton
+            productSlug={loupe.slug}
+            productName={loupe.name}
+            selection={`${magnification} · ${frame.name} frame, ${color.name}`}
+          />
           <p className="text-xs text-muted">Price and delivery time are discussed by phone.</p>
         </div>
       </div>

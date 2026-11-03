@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import { AccountNav } from "@/components/account/AccountNav";
+import AccountGuard from "@/containers/account/AccountGuard";
 
 export const metadata: Metadata = {
   robots: { index: false },
@@ -12,7 +13,9 @@ export default function AccountLayout({ children }: LayoutProps<"/account">) {
       <aside>
         <AccountNav />
       </aside>
-      <section>{children}</section>
+      <section>
+        <AccountGuard>{children}</AccountGuard>
+      </section>
     </Container>
   );
 }
