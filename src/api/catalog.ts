@@ -1,9 +1,13 @@
 import { CatalogProduct } from "@/types";
 
+const BUILD_STARTED_AT = Date.now();
+
 let cachedCatalog: Promise<CatalogProduct[]> | undefined;
 
 const fetchCatalog = async (): Promise<CatalogProduct[]> => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, { signal: AbortSignal.timeout(90_000) });
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?build=${BUILD_STARTED_AT}`, {
+    signal: AbortSignal.timeout(90_000),
+  });
   if (!response.ok) throw new Error(`Catalog request failed with ${response.status}`);
   return (await response.json()).data;
 };

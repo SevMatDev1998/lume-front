@@ -22,7 +22,9 @@ const GuestPrompt = () => {
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-sm text-muted">Log in or create an account to send a request. We will call you to discuss the details.</p>
+      <p className="text-sm text-muted">
+        Log in or create an account to send a request. We will call you to discuss the details.
+      </p>
       <ButtonLink href={loginRoute(pathname)} block>
         Log in
       </ButtonLink>
@@ -33,7 +35,13 @@ const GuestPrompt = () => {
   );
 };
 
-const OrderForm = ({ productName, productSlug, selection, options, onDone }: OrderButtonProps & { onDone: () => void }) => {
+const OrderForm = ({
+  productName,
+  productSlug,
+  selection,
+  options,
+  onDone,
+}: OrderButtonProps & { onDone: () => void }) => {
   const { user } = useAuth();
   const [createInquiry, { isLoading, isSuccess }] = useCreateInquiryMutation();
   const [option, setOption] = useState(options?.values[0] ?? "");
@@ -56,7 +64,9 @@ const OrderForm = ({ productName, productSlug, selection, options, onDone }: Ord
     return (
       <div className="flex flex-col gap-4 text-center">
         <p className="text-lg font-semibold">Request sent</p>
-        <p className="text-sm text-muted">We will call you{user?.phone && ` at ${user.phone}`} to discuss the price and details.</p>
+        <p className="text-sm text-muted">
+          We will call you{user?.phone && ` at ${user.phone}`} to discuss the price and details.
+        </p>
         <ButtonLink href={RouteEnum.ACCOUNT} variant="outline" block onClick={onDone}>
           My orders
         </ButtonLink>

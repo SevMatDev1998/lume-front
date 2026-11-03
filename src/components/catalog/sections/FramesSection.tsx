@@ -1,7 +1,8 @@
 import RouteEnum from "@/enums/route.enum";
+import { ProductImage } from "@/components/product/ProductImage";
 import { getCategoryProducts } from "@/api/catalog";
 import { optionValues, specValue } from "@/utils/catalog";
-import { Button, ButtonLink, Chip, Placeholder } from "@/components/ui";
+import { Button, ButtonLink, Chip } from "@/components/ui";
 import { ContentSection } from "@/components/sections/ContentSection";
 import { PageHeading } from "@/components/sections/PageHeading";
 import { cn } from "@/utils/cn";
@@ -41,11 +42,12 @@ export const FramesSection = async () => {
       {frames.map((frame, index) => (
         <section key={frame.slug} id={frame.slug} className="scroll-mt-16 border-t border-line">
           <div className="grid items-center lg:grid-cols-2">
-            <Placeholder
+            <ProductImage
+              src={frame.images[0]}
+              alt={frame.name}
+              sizes="(min-width: 1024px) 50vw, 100vw"
               className={cn("aspect-video lg:aspect-auto lg:h-full lg:min-h-[28rem]", index % 2 && "lg:order-2")}
-            >
-              {frame.name} photo
-            </Placeholder>
+            />
             <div className="flex flex-col gap-4 px-4 py-10 sm:px-10 lg:px-16">
               <span className="text-xs tracking-widest text-muted">{String(index + 1).padStart(2, "0")}</span>
               <h2 className="text-3xl font-semibold">{frame.name}</h2>

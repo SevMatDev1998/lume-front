@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { ProductImage } from "@/components/product/ProductImage";
 import { productRoute } from "@/enums/route.enum";
-import { ButtonLink, Placeholder } from "@/components/ui";
+import { ButtonLink } from "@/components/ui";
 import { getCategoryProducts } from "@/api/catalog";
 import { CatalogProduct } from "@/types";
 import { ContentSection } from "@/components/sections/ContentSection";
@@ -8,13 +9,13 @@ import { PageHeading } from "@/components/sections/PageHeading";
 
 const AccessoryGrid = ({ items }: { items: CatalogProduct[] }) => (
   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-    {items.map(({ slug, name, description }) => (
+    {items.map(({ slug, name, description, images }) => (
       <Link
         key={slug}
         href={productRoute("accessories", slug)}
         className="overflow-hidden rounded-xl border border-line hover:border-ink"
       >
-        <Placeholder className="aspect-video">Photo</Placeholder>
+        <ProductImage src={images[0]} alt={name} sizes="(min-width: 1024px) 33vw, 100vw" className="aspect-video" />
         <div className="p-4">
           <h3 className="font-semibold">{name}</h3>
           {description && <p className="mt-1 text-sm text-muted">{description}</p>}

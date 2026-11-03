@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { ProductImage } from "@/components/product/ProductImage";
 import { catalogSectionRoute, productRoute } from "@/enums/route.enum";
 import { getCategoryProducts } from "@/api/catalog";
-import { ButtonLink, Placeholder } from "@/components/ui";
+import { ButtonLink } from "@/components/ui";
 import { ContentSection, InfoCard } from "@/components/sections/ContentSection";
 import { PageHeading } from "@/components/sections/PageHeading";
 
@@ -70,7 +71,12 @@ export const LightsSection = async () => {
               href={productRoute("lights", light.slug)}
               className="overflow-hidden rounded-xl border border-line"
             >
-              <Placeholder className="aspect-4/3">Photo</Placeholder>
+              <ProductImage
+                src={light.images[0]}
+                alt={light.name}
+                sizes="(min-width: 1024px) 25vw, 50vw"
+                className="aspect-4/3"
+              />
               <div className="p-4">
                 <p className="font-semibold">{light.name}</p>
                 <p className="mt-1 text-sm text-muted">{light.description}</p>

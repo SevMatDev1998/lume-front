@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { catalogSectionRoute, RouteEnum } from "@/enums/route.enum";
-import { Badge, ButtonLink, Chip, Container, Placeholder } from "@/components/ui";
+import { Badge, ButtonLink, Chip, Container } from "@/components/ui";
+import { ProductGallery } from "@/components/product/ProductGallery";
 import { OrderButton } from "@/components/product/OrderButton";
 import { OPTION_LABELS } from "@/constants/catalog";
 import { getCatalog, getProduct } from "@/api/catalog";
@@ -42,14 +43,7 @@ const ProductContent = async ({ params }: Pick<PageProps<"/catalog/[section]/[sl
         <Link href={catalogSectionRoute(section)}>{product.category.name}</Link> / {product.name}
       </nav>
       <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
-        <div>
-          <Placeholder className="aspect-4/3 rounded-xl">Main photo</Placeholder>
-          <div className="mt-3 grid grid-cols-4 gap-2">
-            {[1, 2, 3, 4].map((index) => (
-              <Placeholder key={index} className="aspect-4/3 rounded-md" />
-            ))}
-          </div>
-        </div>
+        <ProductGallery images={product.images} name={product.name} />
         <div className="flex flex-col gap-5">
           <Badge>ExamVision · {product.subcategory.name}</Badge>
           <h1 className="text-3xl font-semibold">{product.name}</h1>

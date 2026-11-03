@@ -1,8 +1,9 @@
 import Link from "next/link";
 import RouteEnum, { catalogSectionRoute, productRoute } from "@/enums/route.enum";
+import { ProductImage } from "@/components/product/ProductImage";
 import { getCategoryProducts } from "@/api/catalog";
 import { optionValues } from "@/utils/catalog";
-import { ButtonLink, Chip, Container, Placeholder } from "@/components/ui";
+import { ButtonLink, Chip, Container } from "@/components/ui";
 import { PageHeading } from "@/components/sections/PageHeading";
 import { LoupeSolutions } from "@/components/catalog/LoupeSolutions";
 
@@ -34,7 +35,12 @@ export const LoupesSection = async () => {
               href={productRoute("loupes", model.slug)}
               className="w-56 shrink-0 snap-start overflow-hidden rounded-xl bg-soft sm:w-auto"
             >
-              <Placeholder className="aspect-3/4">Photo</Placeholder>
+              <ProductImage
+                src={model.images[0]}
+                alt={model.name}
+                sizes="(min-width: 1024px) 20vw, 50vw"
+                className="aspect-3/4"
+              />
               <div className="flex flex-col gap-2 p-3">
                 <p className="text-sm font-semibold">{model.name}</p>
                 <p className="text-xs text-muted">{model.description}</p>

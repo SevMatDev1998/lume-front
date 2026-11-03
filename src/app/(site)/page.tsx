@@ -1,5 +1,6 @@
 import Link from "next/link";
 import RouteEnum, { productRoute, professionRoute } from "@/enums/route.enum";
+import { ProductImage } from "@/components/product/ProductImage";
 import { getCategoryProducts } from "@/api/catalog";
 import { Badge, ButtonLink, Container, Placeholder } from "@/components/ui";
 import { ContactCta } from "@/components/sections/ContactCta";
@@ -38,7 +39,12 @@ export default async function HomePage() {
               href={productRoute("loupes", loupe.slug)}
               className="overflow-hidden rounded-xl border border-line"
             >
-              <Placeholder className="aspect-4/3">Photo</Placeholder>
+              <ProductImage
+                src={loupe.images[0]}
+                alt={loupe.name}
+                sizes="(min-width: 1024px) 25vw, 50vw"
+                className="aspect-4/3"
+              />
               <p className="p-3 text-sm font-semibold">{loupe.name}</p>
             </Link>
           ))}
