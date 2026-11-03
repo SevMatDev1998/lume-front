@@ -1,12 +1,13 @@
 import Link from "next/link";
-import RouteEnum, { catalogSectionRoute, professionRoute } from "@/enums/route.enum";
+import RouteEnum, { productRoute, professionRoute } from "@/enums/route.enum";
+import { getCategoryProducts } from "@/api/catalog";
 import { Badge, ButtonLink, Container, Placeholder } from "@/components/ui";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { PROFESSION_AUDIENCES } from "@/constants/professions";
 
-const MODELS = ["Kepler Advanced", "Kepler Reflekt", "Kepler Kompakt", "Galilean HD"];
+export default async function HomePage() {
+  const loupes = (await getCategoryProducts("loupes")).slice(0, 4);
 
-export default function HomePage() {
   return (
     <>
       <section className="grid lg:grid-cols-2">
@@ -31,10 +32,14 @@ export default function HomePage() {
       <Container className="border-t border-line py-14">
         <h2 className="mb-6 text-2xl font-semibold">Models</h2>
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {MODELS.map((model) => (
-            <Link key={model} href={catalogSectionRoute("loupes")} className="overflow-hidden rounded-xl border border-line">
+          {loupes.map((loupe) => (
+            <Link
+              key={loupe.slug}
+              href={productRoute("loupes", loupe.slug)}
+              className="overflow-hidden rounded-xl border border-line"
+            >
               <Placeholder className="aspect-4/3">Photo</Placeholder>
-              <p className="p-3 text-sm font-semibold">{model}</p>
+              <p className="p-3 text-sm font-semibold">{loupe.name}</p>
             </Link>
           ))}
         </div>

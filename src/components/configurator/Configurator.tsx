@@ -1,7 +1,9 @@
 "use client";
 
 import { ReactNode, useState } from "react";
-import { FRAME_COLORS, FRAME_MODELS, LOUPE_MODELS } from "@/constants/catalog";
+import { swatch } from "@/constants/catalog";
+import { CatalogProduct } from "@/types";
+import { optionValues } from "@/utils/catalog";
 import { OrderButton } from "@/components/product/OrderButton";
 import { cn } from "@/utils/cn";
 import { ConfiguratorSelection, ConfiguratorViewer } from "./ConfiguratorViewer";
@@ -27,15 +29,22 @@ const OptionButton = ({ active, onClick, children }: { active: boolean; onClick:
   </button>
 );
 
-export const Configurator = () => {
-  const [loupe, setLoupe] = useState(LOUPE_MODELS[0]);
-  const [magnification, setMagnification] = useState(loupe.magnifications[0]);
-  const [frame, setFrame] = useState(FRAME_MODELS[0]);
-  const [color, setColor] = useState(FRAME_COLORS[0]);
+type ConfiguratorProps = { loupes: CatalogProduct[]; frames: CatalogProduct[] };
+
+export const Configurator = ({ loupes, frames }: ConfiguratorProps) => {
+  const [loupe, setLoupe] = useState(loupes[0]);
+  const [magnification, setMagnification] = useState(optionValues(loupes[0], "MAGNIFICATION")[0] ?? "");
+  const [frame, setFrame] = useState(frames[0]);
+  const [color, setColor] = useState(optionValues(frames[0], "COLOR")[0] ?? "");
 
   const selectLoupe = (model: ConfiguratorSelection["loupe"]) => {
     setLoupe(model);
-    setMagnification(model.magnifications[0]);
+    setMagnification(optionValues(model, "MAGNIFICATION")[0] ?? "");
+  };
+
+  const selectFrame = (model: ConfiguratorSelection["frame"]) => {
+    setFrame(model);
+    setColor(optionValues(model, "COLOR")[0] ?? "");
   };
 
   return (
@@ -46,7 +55,7 @@ export const Configurator = () => {
 
       <div className="flex flex-col px-5 sm:px-6">
         <OptionGroup step={1} title="Loupe model">
-          {LOUPE_MODELS.map((model) => (
+          {loupes.map((model) => (
             <OptionButton key={model.slug} active={model.slug === loupe.slug} onClick={() => selectLoupe(model)}>
               {model.name}
             </OptionButton>
@@ -54,7 +63,7 @@ export const Configurator = () => {
         </OptionGroup>
 
         <OptionGroup step={2} title="Magnification">
-          {loupe.magnifications.map((value) => (
+          {optionValues(loupe, "MAGNIFICATION").map((value) => (
             <OptionButton key={value} active={value === magnification} onClick={() => setMagnification(value)}>
               {value}
             </OptionButton>
@@ -62,24 +71,25 @@ export const Configurator = () => {
         </OptionGroup>
 
         <OptionGroup step={3} title="Frame">
-          {FRAME_MODELS.map((model) => (
-            <OptionButton key={model.slug} active={model.slug === frame.slug} onClick={() => setFrame(model)}>
+          {frames.map((model) => (
+            <OptionButton key={model.slug} active={model.slug === frame.slug} onClick={() => selectFrame(model)}>
               {model.name}
             </OptionButton>
           ))}
         </OptionGroup>
 
-        <OptionGroup step={4} title={`Frame colour · ${color.name}`}>
-          {FRAME_COLORS.map((option) => (
+        <OptionGroup step={4} title={`Frame colour · ${color}`}>
+          {optionValues(frame, "COLOR").map((option) => (
             <button
-              key={option.slug}
+              key={option}
               onClick={() => setColor(option)}
-              aria-label={option.name}
+              aria-label={option}
+              title={option}
               className={cn(
                 "size-9 rounded-full border-2 ring-offset-2 transition",
-                option.slug === color.slug ? "border-white ring-2 ring-ink" : "border-line",
+                option === color ? "border-white ring-2 ring-ink" : "border-line",
               )}
-              style={{ backgroundColor: option.hex }}
+              style={{ backgroundColor: swatch(option) }}
             />
           ))}
         </OptionGroup>
@@ -88,7 +98,7 @@ export const Configurator = () => {
           <OrderButton
             productSlug={loupe.slug}
             productName={loupe.name}
-            selection={`${magnification} · ${frame.name} frame, ${color.name}`}
+            selection={[magnification, `${frame.name} frame`, color].filter(Boolean).join(" · ")}
           />
           <p className="text-xs text-muted">Price and delivery time are discussed by phone.</p>
         </div>

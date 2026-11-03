@@ -6,6 +6,7 @@ export type VisitType = (typeof VISIT_TYPES)[number]["value"];
 export type VisitPurpose = (typeof VISIT_PURPOSES)[number]["value"];
 export type InquiryStatus = "NEW" | "IN_PROGRESS" | "CLOSED";
 export type BookingStatus = "NEW" | "CONFIRMED" | "DONE" | "CANCELLED";
+export type OptionType = "MAGNIFICATION" | "COLOR" | "SIZE" | "TEMPLE_TIP";
 
 export interface User {
   id: string;
@@ -55,4 +56,17 @@ export interface BookingSchedule {
   timeZone: string;
   daysAhead: number;
   slots: string[];
+}
+
+export interface CatalogProduct {
+  id: string;
+  slug: string;
+  name: string;
+  description: string | null;
+  images: string[];
+  pdfUrl: string | null;
+  category: { slug: string; name: string } | null;
+  subcategory: { slug: string; name: string };
+  specs: { label: string; value: string }[];
+  options: Partial<Record<OptionType, string[]>>;
 }

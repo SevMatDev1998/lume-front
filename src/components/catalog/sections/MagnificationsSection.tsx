@@ -1,6 +1,7 @@
 import Link from "next/link";
 import RouteEnum, { productRoute } from "@/enums/route.enum";
-import { LOUPE_MODELS } from "@/constants/catalog";
+import { getCategoryProducts } from "@/api/catalog";
+import { optionValues } from "@/utils/catalog";
 import { ButtonLink, Chip } from "@/components/ui";
 import { ContentSection, InfoCard } from "@/components/sections/ContentSection";
 import { PageHeading } from "@/components/sections/PageHeading";
@@ -64,81 +65,88 @@ const MagnificationTable = ({ headers, rows }: { headers: string[]; rows: string
   </div>
 );
 
-export const MagnificationsSection = () => (
-  <>
-    <PageHeading
-      eyebrow="Products"
-      title="ExamVision Magnifications"
-      actions={
-        <>
-          <ButtonLink href="#range">Range of magnification</ButtonLink>
-          <ButtonLink href={RouteEnum.BOOKING} variant="outline">
-            Try them on
-          </ButtonLink>
-        </>
-      }
-    >
-      15 magnifications in five loupe systems: Galilean Essential, Galilean HD, Kepler Kompakt, Kepler Reflekt and
-      Kepler Advanced.
-    </PageHeading>
+export const MagnificationsSection = async () => {
+  const loupes = await getCategoryProducts("loupes");
 
-    <ContentSection title="Why loupes and magnification">
-      <div className="grid gap-3 sm:grid-cols-2">
-        <InfoCard title="Better vision, better treatment">
-          Loupes fitted to you make precise work easier and lead to better results for your patients.
-        </InfoCard>
-        <InfoCard title="Ergonomics and comfort">
-          You work at a safe distance with a straight back, which helps to avoid neck and back pain.
-        </InfoCard>
-      </div>
-    </ContentSection>
+  return (
+    <>
+      <PageHeading
+        eyebrow="Products"
+        title="ExamVision Magnifications"
+        actions={
+          <>
+            <ButtonLink href="#range">Range of magnification</ButtonLink>
+            <ButtonLink href={RouteEnum.BOOKING} variant="outline">
+              Try them on
+            </ButtonLink>
+          </>
+        }
+      >
+        15 magnifications in five loupe systems: Galilean Essential, Galilean HD, Kepler Kompakt, Kepler Reflekt and
+        Kepler Advanced.
+      </PageHeading>
 
-    <ContentSection
-      id="range"
-      title="15 magnifications in five loupe systems"
-      intro="Choose the lowest magnification that does the job, a higher one makes the posture harder. Many doctors use a Galilean and a Kepler loupe for different tasks."
-    >
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-        {LOUPE_MODELS.map((model) => (
-          <Link
-            key={model.slug}
-            href={productRoute("loupes", model.slug)}
-            className="flex flex-col gap-2 rounded-xl border border-line p-4 hover:border-ink"
-          >
-            <p className="font-semibold">{model.name}</p>
-            <div className="flex flex-wrap gap-1">
-              {model.magnifications.map((magnification) => (
-                <Chip key={magnification}>{magnification}</Chip>
-              ))}
-            </div>
-            <p className="text-xs text-muted">{model.description}</p>
-          </Link>
-        ))}
-      </div>
-    </ContentSection>
-
-    <ContentSection title="Two lens systems">
-      <div className="grid gap-3 sm:grid-cols-2">
-        {LENS_SYSTEMS.map((system) => (
-          <InfoCard key={system.title} title={system.title}>
-            {system.text}
+      <ContentSection title="Why loupes and magnification">
+        <div className="grid gap-3 sm:grid-cols-2">
+          <InfoCard title="Better vision, better treatment">
+            Loupes fitted to you make precise work easier and lead to better results for your patients.
           </InfoCard>
-        ))}
-      </div>
-    </ContentSection>
+          <InfoCard title="Ergonomics and comfort">
+            You work at a safe distance with a straight back, which helps to avoid neck and back pain.
+          </InfoCard>
+        </div>
+      </ContentSection>
 
-    <ContentSection
-      title="Galilean lens system"
-      intro="Field of view and depth of field at a 45 cm working distance. Real values depend on your distance, prescription and age."
-    >
-      <MagnificationTable
-        headers={["Magnification", "Loupe", "Field of view", "Depth of field", "Best for"]}
-        rows={GALILEAN_TABLE}
-      />
-    </ContentSection>
+      <ContentSection
+        id="range"
+        title="15 magnifications in five loupe systems"
+        intro="Choose the lowest magnification that does the job, a higher one makes the posture harder. Many doctors use a Galilean and a Kepler loupe for different tasks."
+      >
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {loupes.map((model) => (
+            <Link
+              key={model.slug}
+              href={productRoute("loupes", model.slug)}
+              className="flex flex-col gap-2 rounded-xl border border-line p-4 hover:border-ink"
+            >
+              <p className="font-semibold">{model.name}</p>
+              <div className="flex flex-wrap gap-1">
+                {optionValues(model, "MAGNIFICATION").map((magnification) => (
+                  <Chip key={magnification}>{magnification}</Chip>
+                ))}
+              </div>
+              <p className="text-xs text-muted">{model.description}</p>
+            </Link>
+          ))}
+        </div>
+      </ContentSection>
 
-    <ContentSection title="Kepler lens system" intro="An LED light is recommended for higher magnifications.">
-      <MagnificationTable headers={["Magnification", "Loupe", "Field of view", "Depth of field"]} rows={KEPLER_TABLE} />
-    </ContentSection>
-  </>
-);
+      <ContentSection title="Two lens systems">
+        <div className="grid gap-3 sm:grid-cols-2">
+          {LENS_SYSTEMS.map((system) => (
+            <InfoCard key={system.title} title={system.title}>
+              {system.text}
+            </InfoCard>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection
+        title="Galilean lens system"
+        intro="Field of view and depth of field at a 45 cm working distance. Real values depend on your distance, prescription and age."
+      >
+        <MagnificationTable
+          headers={["Magnification", "Loupe", "Field of view", "Depth of field", "Best for"]}
+          rows={GALILEAN_TABLE}
+        />
+      </ContentSection>
+
+      <ContentSection title="Kepler lens system" intro="An LED light is recommended for higher magnifications.">
+        <MagnificationTable
+          headers={["Magnification", "Loupe", "Field of view", "Depth of field"]}
+          rows={KEPLER_TABLE}
+        />
+      </ContentSection>
+    </>
+  );
+};
