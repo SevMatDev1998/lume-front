@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import heroPhoto from "@/assets/hero-loupes.jpg";
 import RouteEnum, { productRoute, professionRoute } from "@/enums/route.enum";
 import { ProductImage } from "@/components/product/ProductImage";
 import { getCategoryProducts } from "@/api/catalog";
@@ -15,10 +17,10 @@ export default async function HomePage() {
         <Container className="flex flex-col justify-center gap-5 py-14 lg:py-24 lg:pr-12">
           <Badge>● Official ExamVision partner</Badge>
           <h1 className="text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">
-            Loupes for dentists and surgeons
+            Precision Made Personal
           </h1>
           <p className="max-w-md text-muted">
-            We help you choose the model and magnification for your work. Fitting and consultation are free.
+            Handcrafted loupes from Denmark, made for the way you see and work.
           </p>
           <div className="flex flex-wrap gap-3">
             <ButtonLink href={RouteEnum.CATALOG}>View products</ButtonLink>
@@ -27,7 +29,17 @@ export default async function HomePage() {
             </ButtonLink>
           </div>
         </Container>
-        <Placeholder className="min-h-72 lg:min-h-[520px]">Hero photo</Placeholder>
+        <div className="relative min-h-72 bg-black lg:min-h-[520px]">
+          <Image
+            src={heroPhoto}
+            alt="Two people wearing ExamVision loupes"
+            fill
+            unoptimized
+            priority
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="object-cover"
+          />
+        </div>
       </section>
 
       <Container className="border-t border-line py-14">
@@ -70,7 +82,7 @@ export default async function HomePage() {
         <Placeholder className="aspect-video rounded-xl">Made in Denmark</Placeholder>
         <div>
           <h2 className="mb-3 text-2xl font-semibold">Why ExamVision</h2>
-          <p className="text-muted">Handmade in Denmark, fitted to you, Red Dot Award, ISO 13485.</p>
+          <p className="text-muted">More than magnification. A vision tailored to you. Discover the craftsmanship, personalisation and quality behind ExamVision.</p>
         </div>
       </Container>
 
