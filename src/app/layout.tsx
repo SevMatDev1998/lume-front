@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Noto_Sans_Armenian } from "next/font/google";
+import { DM_Serif_Display, Inter, Noto_Sans_Armenian } from "next/font/google";
 import { StoreProvider } from "@/providers/StoreProvider";
 import "./globals.css";
 
@@ -13,6 +13,12 @@ const notoArmenian = Noto_Sans_Armenian({
   subsets: ["armenian"],
 });
 
+const dmSerif = DM_Serif_Display({
+  variable: "--font-dm-serif",
+  subsets: ["latin"],
+  weight: "400",
+});
+
 export const metadata: Metadata = {
   title: {
     template: "%s | Lume",
@@ -23,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} ${notoArmenian.variable} h-full antialiased`}>
+    <html lang="en" className={`${inter.variable} ${notoArmenian.variable} ${dmSerif.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <StoreProvider>{children}</StoreProvider>
       </body>

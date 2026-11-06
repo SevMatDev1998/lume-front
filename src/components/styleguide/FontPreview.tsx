@@ -10,7 +10,7 @@ export const FontPreview = ({ options, children }: { options: FontOption[]; chil
 
   return (
     <>
-      <div className="sticky top-16 z-20 -mx-4 mb-8 flex gap-2 overflow-x-auto border-b border-line bg-white/95 px-4 py-3 backdrop-blur sm:mx-0 sm:px-0">
+      <div className="sticky top-header z-20 -mx-4 mb-8 flex gap-2 overflow-x-auto border-b border-line bg-white/95 px-4 py-3 backdrop-blur sm:mx-0 sm:px-0">
         {options.map((option) => (
           <button
             key={option.label}

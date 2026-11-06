@@ -45,7 +45,7 @@ export default function ServicePage() {
         <Placeholder className="min-h-64">Service photo</Placeholder>
       </section>
 
-      <Container id="service" className="scroll-mt-16 border-t border-line py-14">
+      <Container id="service" className="scroll-mt-header border-t border-line py-14">
         <h2 className="mb-6 text-2xl font-semibold">Service</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map(([title, text]) => (
@@ -57,7 +57,7 @@ export default function ServicePage() {
         </div>
       </Container>
 
-      <Container id="warranty" className="scroll-mt-16 border-t border-line py-14">
+      <Container id="warranty" className="scroll-mt-header border-t border-line py-14">
         <h2 className="mb-2 text-2xl font-semibold">Warranty</h2>
         <p className="mb-6 max-w-2xl text-muted">Warranty terms and periods come from ExamVision. Keep your order number, we find everything by it.</p>
         <div className="grid gap-3 sm:grid-cols-3">

@@ -11,7 +11,7 @@ type ContentSectionProps = {
 };
 
 export const ContentSection = ({ id, title, intro, className, children }: ContentSectionProps) => (
-  <section id={id} className={cn("scroll-mt-16 border-t border-line", className)}>
+  <section id={id} className={cn("scroll-mt-header border-t border-line", className)}>
     <Container className="py-14">
       <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h2>
       {intro && <div className="mt-3 max-w-2xl text-muted">{intro}</div>}

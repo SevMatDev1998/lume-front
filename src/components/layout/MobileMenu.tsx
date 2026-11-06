@@ -35,7 +35,7 @@ export const MobileMenu = () => {
         onClick={closeOnLinkClick}
         className="m-0 h-dvh max-h-none w-full max-w-none bg-white text-ink backdrop:bg-transparent open:flex open:flex-col"
       >
-        <div className="flex h-16 shrink-0 items-center justify-between border-b border-line px-4 sm:px-6">
+        <div className="flex h-header shrink-0 items-center justify-between border-b border-line px-4 sm:px-6">
           <Logo />
           <form method="dialog">
             <button aria-label="Close menu" className="-mr-2 flex size-10 items-center justify-center text-xl">

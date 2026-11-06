@@ -40,7 +40,7 @@ export const FramesSection = async () => {
       </PageHeading>
 
       {frames.map((frame, index) => (
-        <section key={frame.slug} id={frame.slug} className="scroll-mt-16 border-t border-line">
+        <section key={frame.slug} id={frame.slug} className="scroll-mt-header border-t border-line">
           <div className="grid items-center lg:grid-cols-2">
             <ProductImage
               src={frame.images[0]}

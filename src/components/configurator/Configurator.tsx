@@ -49,7 +49,7 @@ export const Configurator = ({ loupes, frames }: ConfiguratorProps) => {
 
   return (
     <div className="grid overflow-hidden rounded-2xl border border-line lg:grid-cols-[1fr_380px]">
-      <div className="lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:max-h-[640px]">
+      <div className="lg:sticky lg:top-header lg:h-[calc(100vh-var(--spacing-header))] lg:max-h-[640px]">
         <ConfiguratorViewer loupe={loupe} magnification={magnification} frame={frame} color={color} />
       </div>
 
