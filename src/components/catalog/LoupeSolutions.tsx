@@ -64,7 +64,7 @@ export const LoupeSolutions = async () => {
           <div className="flex flex-col gap-4 px-4 py-10 sm:px-10 lg:px-16">
             <h2 className="text-3xl font-semibold">Ergonomics</h2>
             <p className="max-w-md text-muted">
-              Try ExamVision loupes yourself and get advice from your local partner. We bring the demo set to you.
+              Try ExamVision loupes yourself and get advice from your local dealer. We bring the demo set to you.
             </p>
             <ButtonLink href={RouteEnum.BOOKING} variant="outline" className="w-max">
               Book a visit

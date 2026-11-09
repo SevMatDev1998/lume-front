@@ -4,13 +4,13 @@ import { ContactCta } from "@/components/sections/ContactCta";
 
 export const metadata: Metadata = {
   title: "About us",
-  description: "Lume is the official ExamVision partner in Armenia.",
+  description: "Lume is the official ExamVision dealer in Armenia.",
 };
 
 const STATS = [
   ["10+", "years of experience"],
   ["500+", "doctors with loupes"],
-  ["1", "official partner in Armenia"],
+  ["1", "official dealer in Armenia"],
 ];
 
 const STEPS = ["You choose a model on the site", "We contact you and take measurements", "Your loupes are made for you"];
@@ -21,7 +21,7 @@ export default function AboutPage() {
       <section className="grid lg:grid-cols-2">
         <Container className="flex flex-col justify-center gap-4 py-14 lg:pr-12">
           <Badge>● About us</Badge>
-          <h1 className="text-4xl font-semibold tracking-tight">Lume, official ExamVision partner</h1>
+          <h1 className="text-4xl font-semibold tracking-tight">Lume, official ExamVision dealer</h1>
           <p className="text-muted">Who we are, since when we work and how we help: loupe selection, fittings and service.</p>
         </Container>
         <Placeholder className="min-h-64">Team photo</Placeholder>

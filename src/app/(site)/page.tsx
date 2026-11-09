@@ -2,8 +2,8 @@ import { getImageProps } from "next/image";
 import Link from "next/link";
 import heroDesktopPhoto from "@/assets/hero-desktop.jpg";
 import heroMobilePhoto from "@/assets/hero-mobile.jpg";
-import RouteEnum, { productRoute, professionRoute } from "@/enums/route.enum";
-import { ProductImage } from "@/components/product/ProductImage";
+import RouteEnum, { professionRoute } from "@/enums/route.enum";
+import { ModelCard } from "@/components/catalog/ModelCard";
 import { getCategoryProducts } from "@/api/catalog";
 import { Badge, ButtonLink, Container, Placeholder } from "@/components/ui";
 import { ContactCta } from "@/components/sections/ContactCta";
@@ -14,7 +14,7 @@ const heroDesktop = getImageProps({ ...heroImage, src: heroDesktopPhoto }).props
 const heroMobile = getImageProps({ ...heroImage, src: heroMobilePhoto, fetchPriority: "high" }).props;
 
 export default async function HomePage() {
-  const loupes = (await getCategoryProducts("loupes")).slice(0, 4);
+  const loupes = await getCategoryProducts("loupes");
 
   return (
     <>
@@ -27,7 +27,7 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent lg:bg-linear-to-r lg:from-black lg:via-transparent lg:via-10%" />
         </div>
         <Container className="relative flex w-full flex-col gap-5 py-14 lg:py-20">
-          <Badge className="border-white/30 text-white/80">● Official ExamVision partner</Badge>
+          <Badge className="border-white/30 text-white/80">● Official ExamVision dealer</Badge>
           <h1 className="max-w-lg text-4xl leading-tight font-semibold tracking-tight sm:text-6xl">
             Precision Made Personal
           </h1>
@@ -50,22 +50,10 @@ export default async function HomePage() {
       </section>
 
       <Container className="border-t border-line py-14">
-        <h2 className="mb-6 text-2xl font-semibold">Models</h2>
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <h2 className="mb-6 text-2xl font-semibold">Loupes</h2>
+        <div className="flex flex-wrap justify-center gap-4 *:w-[calc(50%-0.5rem)] lg:*:w-[calc((100%-2rem)/3)]">
           {loupes.map((loupe) => (
-            <Link
-              key={loupe.slug}
-              href={productRoute("loupes", loupe.slug)}
-              className="overflow-hidden rounded-xl border border-line"
-            >
-              <ProductImage
-                src={loupe.images[0]}
-                alt={loupe.name}
-                sizes="(min-width: 1024px) 25vw, 50vw"
-                className="aspect-4/3"
-              />
-              <p className="p-3 text-sm font-semibold">{loupe.name}</p>
-            </Link>
+            <ModelCard key={loupe.slug} product={loupe} />
           ))}
         </div>
       </Container>

@@ -10,7 +10,7 @@ export const Footer = () => (
     <Container className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
       <div className="flex flex-col gap-3">
         <Logo />
-        <p className="text-sm text-muted">Official ExamVision partner in Armenia.</p>
+        <p className="text-sm text-muted">Official ExamVision dealer in Armenia.</p>
       </div>
       <div className="flex flex-col gap-2 text-sm">
         <span className="mb-1 text-xs tracking-wider text-muted uppercase">Products</span>
@@ -39,7 +39,7 @@ export const Footer = () => (
       </div>
     </Container>
     <Container className="border-t border-line py-5 text-xs text-muted">
-      © Lume · Official ExamVision partner
+      © Lume · Official ExamVision dealer
     </Container>
   </footer>
 );

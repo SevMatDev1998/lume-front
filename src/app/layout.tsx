@@ -22,7 +22,7 @@ const dmSerif = DM_Serif_Display({
 export const metadata: Metadata = {
   title: {
     template: "%s | Lume",
-    default: "Lume · Official ExamVision partner in Armenia",
+    default: "Lume · Official ExamVision dealer in Armenia",
   },
   description: "Custom-made ExamVision loupes and LED lights for dentists, hygienists and surgeons in Armenia.",
 };

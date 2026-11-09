@@ -37,7 +37,7 @@ export default function ServicePage() {
         <Container className="flex flex-col justify-center gap-4 py-14 lg:pr-12">
           <Badge>● Service & Warranty</Badge>
           <h1 className="text-4xl font-semibold tracking-tight">We stay with you after the purchase</h1>
-          <p className="text-muted">Adjustment, warranty, cleaning and repair. All in Yerevan, with the official partner.</p>
+          <p className="text-muted">Adjustment, warranty, cleaning and repair. All in Yerevan, with the official dealer.</p>
           <ButtonLink href={RouteEnum.BOOKING} className="w-max">
             Book a service visit
           </ButtonLink>

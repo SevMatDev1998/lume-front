@@ -218,7 +218,7 @@ export default function ComponentsPage() {
 
       <ContentSection title="Badges and chips">
         <Group title="Badge">
-          <Badge>● Official ExamVision partner</Badge>
+          <Badge>● Official ExamVision dealer</Badge>
         </Group>
         <div className="mt-6">
           <Group title="Chip">
