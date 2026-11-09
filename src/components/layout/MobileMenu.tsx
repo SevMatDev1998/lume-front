@@ -23,7 +23,7 @@ export const MobileMenu = () => {
         aria-label="Open menu"
         aria-haspopup="dialog"
         aria-controls="mobile-menu"
-        className="-mr-2 flex size-10 items-center justify-center text-xl"
+        className="flex size-10 items-center justify-center text-xl"
       >
         ☰
       </button>
