@@ -1,6 +1,7 @@
-import Image from "next/image";
+import { getImageProps } from "next/image";
 import Link from "next/link";
-import heroPhoto from "@/assets/hero-loupes.jpg";
+import heroDesktopPhoto from "@/assets/hero-desktop.jpg";
+import heroMobilePhoto from "@/assets/hero-mobile.jpg";
 import RouteEnum, { productRoute, professionRoute } from "@/enums/route.enum";
 import { ProductImage } from "@/components/product/ProductImage";
 import { getCategoryProducts } from "@/api/catalog";
@@ -8,38 +9,44 @@ import { Badge, ButtonLink, Container, Placeholder } from "@/components/ui";
 import { ContactCta } from "@/components/sections/ContactCta";
 import { PROFESSION_AUDIENCES } from "@/constants/professions";
 
+const heroImage = { alt: "Two people wearing ExamVision loupes", fill: true, unoptimized: true } as const;
+const heroDesktop = getImageProps({ ...heroImage, src: heroDesktopPhoto }).props;
+const heroMobile = getImageProps({ ...heroImage, src: heroMobilePhoto, fetchPriority: "high" }).props;
+
 export default async function HomePage() {
   const loupes = (await getCategoryProducts("loupes")).slice(0, 4);
 
   return (
     <>
-      <section className="grid lg:grid-cols-2">
-        <Container className="flex flex-col justify-center gap-5 py-14 lg:py-24 lg:pr-12">
-          <Badge>● Official ExamVision partner</Badge>
-          <h1 className="text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">
+      <section className="relative flex min-h-[calc(100svh-var(--spacing-header))] items-end bg-black text-white lg:items-center">
+        <div className="absolute inset-0 lg:left-auto lg:w-[60%] xl:w-[70%]">
+          <picture>
+            <source media="(min-width: 640px)" srcSet={heroDesktop.src} />
+            <img {...heroMobile} alt={heroMobile.alt} className="object-cover" />
+          </picture>
+          <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent lg:bg-linear-to-r lg:from-black lg:via-transparent lg:via-10%" />
+        </div>
+        <Container className="relative flex w-full flex-col gap-5 py-14 lg:py-20">
+          <Badge className="border-white/30 text-white/80">● Official ExamVision partner</Badge>
+          <h1 className="max-w-lg text-4xl leading-tight font-semibold tracking-tight sm:text-6xl">
             Precision Made Personal
           </h1>
-          <p className="max-w-md text-muted">
+          <p className="max-w-md text-white/80">
             Handcrafted loupes from Denmark, made for the way you see and work.
           </p>
           <div className="flex flex-wrap gap-3">
-            <ButtonLink href={RouteEnum.CATALOG}>View products</ButtonLink>
-            <ButtonLink href={RouteEnum.CONTACT} variant="outline">
+            <ButtonLink href={RouteEnum.CATALOG} variant="light">
+              View products
+            </ButtonLink>
+            <ButtonLink
+              href={RouteEnum.CONTACT}
+              variant="outline"
+              className="border-white text-white hover:bg-white hover:text-ink"
+            >
               Contact us
             </ButtonLink>
           </div>
         </Container>
-        <div className="relative min-h-72 bg-black lg:min-h-[520px]">
-          <Image
-            src={heroPhoto}
-            alt="Two people wearing ExamVision loupes"
-            fill
-            unoptimized
-            priority
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className="object-cover"
-          />
-        </div>
       </section>
 
       <Container className="border-t border-line py-14">
