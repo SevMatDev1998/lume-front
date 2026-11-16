@@ -1,9 +1,8 @@
-import Link from "next/link";
-import RouteEnum, { catalogSectionRoute, productRoute } from "@/enums/route.enum";
-import { ProductImage } from "@/components/product/ProductImage";
+import headingPhoto from "@/assets/loupes-heading.jpg";
+import RouteEnum, { catalogSectionRoute } from "@/enums/route.enum";
 import { getCategoryProducts } from "@/api/catalog";
-import { optionValues } from "@/utils/catalog";
-import { ButtonLink, Chip, Container } from "@/components/ui";
+import { ButtonLink, Container } from "@/components/ui";
+import { ModelCard } from "@/components/catalog/ModelCard";
 import { PageHeading } from "@/components/sections/PageHeading";
 import { LoupeSolutions } from "@/components/catalog/LoupeSolutions";
 
@@ -15,43 +14,35 @@ export const LoupesSection = async () => {
       <PageHeading
         eyebrow="Products"
         title="ExamVision Loupes"
+        image={headingPhoto}
         actions={
           <>
-            <ButtonLink href={RouteEnum.CONFIGURATOR}>Design your own</ButtonLink>
-            <ButtonLink href={catalogSectionRoute("magnifications")} variant="outline">
-              Compare magnifications
+            <ButtonLink href={RouteEnum.BOOKING} variant="light">
+              Book a visit
+            </ButtonLink>
+            <ButtonLink
+              href={RouteEnum.CONFIGURATOR}
+              variant="outline"
+              className="border-white text-white hover:bg-white hover:text-ink"
+            >
+              Design your own
             </ButtonLink>
           </>
         }
       >
-        Five loupe systems, Galilean and Kepler. Magnification from 2.3x to 7.6x, made to your measurements.
+        Five systems, all made to your measurements. Not sure which one to choose? We will help you pick at a fitting.
       </PageHeading>
 
-      <Container className="pb-14">
-        <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:px-0 lg:grid-cols-5">
+      <Container className="py-10 sm:py-14">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
           {loupes.map((model) => (
-            <Link
-              key={model.slug}
-              href={productRoute("loupes", model.slug)}
-              className="w-56 shrink-0 snap-start overflow-hidden rounded-xl bg-soft sm:w-auto"
-            >
-              <ProductImage
-                src={model.images[0]}
-                alt={model.name}
-                sizes="(min-width: 1024px) 20vw, 50vw"
-                className="aspect-3/4"
-              />
-              <div className="flex flex-col gap-2 p-3">
-                <p className="text-sm font-semibold">{model.name}</p>
-                <p className="text-xs text-muted">{model.description}</p>
-                <div className="flex flex-wrap gap-1">
-                  {optionValues(model, "MAGNIFICATION").map((magnification) => (
-                    <Chip key={magnification}>{magnification}</Chip>
-                  ))}
-                </div>
-              </div>
-            </Link>
+            <ModelCard key={model.slug} product={model} />
           ))}
+        </div>
+        <div className="mt-8 flex justify-center">
+          <ButtonLink href={catalogSectionRoute("magnifications")} variant="outline">
+            Compare magnifications
+          </ButtonLink>
         </div>
       </Container>
 
