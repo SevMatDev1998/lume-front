@@ -25,17 +25,15 @@ const SectionContent = async ({ params }: Pick<PageProps<"/catalog/[section]">, 
     <>
       <CatalogSubnav active={section.slug} />
       <Content />
+      {section.slug !== "loupes" && <ContactCta />}
     </>
   );
 };
 
 export default function CatalogSectionPage({ params }: PageProps<"/catalog/[section]">) {
   return (
-    <>
-      <Suspense fallback={<Container className="min-h-96 py-14 text-muted">Loading…</Container>}>
-        <SectionContent params={params} />
-      </Suspense>
-      <ContactCta />
-    </>
+    <Suspense fallback={<Container className="min-h-96 py-14 text-muted">Loading…</Container>}>
+      <SectionContent params={params} />
+    </Suspense>
   );
 }

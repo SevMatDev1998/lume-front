@@ -3,7 +3,7 @@ import { Button, Container, Field, Input, Placeholder, Textarea } from "@/compon
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Contact Lume to choose ExamVision loupes and book a fitting in Yerevan.",
+  description: "Contact Lume to choose ExamVision loupes and book a fitting anywhere in Armenia.",
 };
 
 const CONTACTS = [

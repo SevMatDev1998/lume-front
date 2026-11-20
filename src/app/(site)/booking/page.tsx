@@ -5,7 +5,7 @@ import { BookingCalendar } from "@/components/booking/BookingWidget";
 
 export const metadata: Metadata = {
   title: "Book a visit",
-  description: "Book a free loupe fitting or service visit with Lume in Yerevan.",
+  description: "Book a free loupe fitting or service visit with Lume anywhere in Armenia.",
 };
 
 export default function BookingPage() {
