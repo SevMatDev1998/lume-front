@@ -1,3 +1,4 @@
+import type { StaticImageData } from "next/image";
 import { PROFESSIONS } from "@/constants/professions";
 import { VISIT_PURPOSES, VISIT_TYPES } from "@/constants/booking";
 
@@ -56,6 +57,30 @@ export interface BookingSchedule {
   timeZone: string;
   daysAhead: number;
   slots: string[];
+}
+
+export interface LoupeHotspot {
+  x: number;
+  y: number;
+  title: string;
+  text: string;
+}
+
+export interface LoupeMagnification {
+  value: string;
+  fieldOfView: string;
+  depthOfField: string;
+  zoom: number;
+  use: string;
+}
+
+export interface LoupePage {
+  hero: { image: StaticImageData; background: string; intro: string; highlight: string };
+  stats: { value: string; label: string }[];
+  details: { image: StaticImageData; spots: LoupeHotspot[] }[];
+  magnifications: LoupeMagnification[];
+  light: { image: StaticImageData; paragraphs: string[] };
+  frames: { name: string; image: StaticImageData }[];
 }
 
 export interface CatalogProduct {

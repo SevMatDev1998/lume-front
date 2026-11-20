@@ -28,7 +28,7 @@ export default async function HomePage() {
         </div>
         <Container className="relative flex w-full flex-col gap-5 py-14 lg:py-20">
           <Badge className="border-white/30 text-white/80">● Official ExamVision dealer</Badge>
-          <h1 className="max-w-lg text-4xl leading-tight font-semibold tracking-tight sm:text-6xl">
+          <h1 className="max-w-lg text-4xl leading-tight font-light tracking-tight sm:text-6xl">
             Precision Made Personal
           </h1>
           <p className="max-w-md text-white/80">
