@@ -79,7 +79,8 @@ export interface LoupePage {
   stats: { value: string; label: string }[];
   details: { image: StaticImageData; spots: LoupeHotspot[] }[];
   magnifications: LoupeMagnification[];
-  light: { image: StaticImageData; paragraphs: string[] };
+  viewer: { eyebrow: string; title: string; text: string };
+  light?: { image: StaticImageData; paragraphs: string[] };
   frames: { name: string; image: StaticImageData }[];
 }
 

@@ -5,14 +5,31 @@ import { useState } from "react";
 import { LoupePage } from "@/types";
 import { cn } from "@/utils/cn";
 
-type LoupeDetailsProps = LoupePage["details"][number] & { startNumber: number; flipped?: boolean; name: string };
+type LoupeDetailsProps = LoupePage["details"][number] & {
+  startNumber: number;
+  flipped?: boolean;
+  name: string;
+};
 
-export const LoupeDetails = ({ image, spots, startNumber, flipped, name }: LoupeDetailsProps) => {
+export const LoupeDetails = ({
+  image,
+  spots,
+  startNumber,
+  flipped,
+  name,
+}: LoupeDetailsProps) => {
   const [active, setActive] = useState(0);
 
   const photo = (
     <div className="relative aspect-square overflow-hidden rounded-2xl bg-soft">
-      <Image src={image} alt={name} fill unoptimized sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+      <Image
+        src={image}
+        alt={name}
+        fill
+        unoptimized
+        sizes="(min-width: 1024px) 50vw, 100vw"
+        className="object-cover"
+      />
       {spots.map((spot, index) => (
         <button
           key={spot.title}
@@ -34,7 +51,12 @@ export const LoupeDetails = ({ image, spots, startNumber, flipped, name }: Loupe
   );
 
   return (
-    <div className={cn("grid items-center gap-10 lg:gap-16", flipped ? "lg:grid-cols-[1fr_1.1fr]" : "lg:grid-cols-[1.1fr_1fr]")}>
+    <div
+      className={cn(
+        "grid items-center gap-10 lg:gap-16",
+        flipped ? "lg:grid-cols-[1fr_1.1fr]" : "lg:grid-cols-[1.1fr_1fr]",
+      )}
+    >
       {!flipped && photo}
       <div className="flex flex-col">
         {spots.map((spot, index) => (
@@ -53,7 +75,9 @@ export const LoupeDetails = ({ image, spots, startNumber, flipped, name }: Loupe
             <span className="block text-xl font-normal">
               {startNumber + index}. {spot.title}
             </span>
-            <span className="mt-1 block font-light text-muted">{spot.text}</span>
+            <span className="mt-1 block font-light text-muted">
+              {spot.text}
+            </span>
           </button>
         ))}
       </div>

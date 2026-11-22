@@ -6,6 +6,7 @@
   --color-line: #e5e7eb;
   --color-soft: #f4f5f7;
   --color-accent: #1f4fd8;
+  --color-page: #ffffff;
   --font-sans: var(--font-inter), var(--font-armenian), ui-sans-serif, system-ui, sans-serif;
   --font-logo: var(--font-dm-serif), serif;
   --font-nav: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -19,7 +20,17 @@
 }
 
 body {
-  background: #ffffff;
+  background: var(--color-page);
+  color: var(--color-ink);
+}
+
+@utility theme-dark {
+  --color-page: #0f1216;
+  --color-ink: #eef0f3;
+  --color-muted: #9aa3ae;
+  --color-line: #2a2f37;
+  --color-soft: #181c22;
+  background-color: var(--color-page);
   color: var(--color-ink);
 }
 

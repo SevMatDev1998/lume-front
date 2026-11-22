@@ -2,12 +2,18 @@
 
 import Image, { StaticImageData } from "next/image";
 import { useState } from "react";
-import { LoupeMagnification } from "@/types";
+import { LoupePage } from "@/types";
 import { cn } from "@/utils/cn";
 
-type MagnificationViewerProps = { image: StaticImageData; magnifications: LoupeMagnification[] };
+type MagnificationViewerProps = Pick<LoupePage, "magnifications" | "viewer"> & {
+  image: StaticImageData;
+};
 
-export const MagnificationViewer = ({ image, magnifications }: MagnificationViewerProps) => {
+export const MagnificationViewer = ({
+  image,
+  magnifications,
+  viewer,
+}: MagnificationViewerProps) => {
   const [active, setActive] = useState(0);
   const current = magnifications[active];
 
@@ -31,10 +37,14 @@ export const MagnificationViewer = ({ image, magnifications }: MagnificationView
         />
       </div>
       <div>
-        <p className="text-xs tracking-widest text-muted uppercase">Turn&apos;N&apos;Click</p>
-        <h2 className="mt-2 mb-3.5 text-4xl font-light tracking-tight sm:text-[2.75rem]">One click, a new magnification</h2>
+        <p className="text-xs tracking-widest text-muted uppercase">
+          {viewer.eyebrow}
+        </p>
+        <h2 className="mt-2 mb-3.5 text-4xl font-light tracking-tight sm:text-[2.75rem]">
+          {viewer.title}
+        </h2>
         <p className="max-w-[60ch] text-lg font-light text-muted">
-          Choose a step to see what changes in your field of view at 40 cm.
+          {viewer.text}
         </p>
         <div className="mt-6 flex flex-wrap gap-2">
           {magnifications.map((magnification, index) => (
@@ -45,7 +55,9 @@ export const MagnificationViewer = ({ image, magnifications }: MagnificationView
               onClick={() => setActive(index)}
               className={cn(
                 "rounded-full border px-4.5 py-2.5 text-[15px] font-medium tabular-nums",
-                index === active ? "border-ink bg-ink text-white" : "border-line hover:border-ink",
+                index === active
+                  ? "border-ink bg-ink text-page"
+                  : "border-line hover:border-ink",
               )}
             >
               {magnification.value}
@@ -55,7 +67,9 @@ export const MagnificationViewer = ({ image, magnifications }: MagnificationView
         <dl className="mt-6 grid grid-cols-3 gap-4">
           {facts.map((fact) => (
             <div key={fact.label}>
-              <dd className="text-[2.125rem] font-light tabular-nums">{fact.value}</dd>
+              <dd className="text-[2.125rem] font-light tabular-nums">
+                {fact.value}
+              </dd>
               <dt className="text-[13px] text-muted">{fact.label}</dt>
             </div>
           ))}
