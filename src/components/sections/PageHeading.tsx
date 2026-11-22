@@ -10,10 +10,20 @@ type PageHeadingProps = {
   actions?: ReactNode;
   image?: StaticImageData;
   className?: string;
+  imageClassName?: string;
   fullScreen?: boolean;
 };
 
-export const PageHeading = ({ eyebrow, title, children, actions, image, className, fullScreen }: PageHeadingProps) => {
+export const PageHeading = ({
+  eyebrow,
+  title,
+  children,
+  actions,
+  image,
+  className,
+  imageClassName,
+  fullScreen,
+}: PageHeadingProps) => {
   const content = (
     <Container
       className={cn(
@@ -60,7 +70,10 @@ export const PageHeading = ({ eyebrow, title, children, actions, image, classNam
         className,
       )}
     >
-      <div className="absolute inset-0 lg:left-auto lg:w-[60%]">
+      <div
+        className={cn("absolute inset-0", fullScreen ? "lg:left-auto lg:w-[60%]" : "sm:left-auto sm:h-full sm:max-w-[60%]")}
+        style={fullScreen ? undefined : { aspectRatio: `${image.width} / ${image.height}` }}
+      >
         <Image
           src={image}
           alt=""
@@ -68,9 +81,18 @@ export const PageHeading = ({ eyebrow, title, children, actions, image, classNam
           unoptimized
           preload
           sizes="(min-width: 1024px) 60vw, 100vw"
-          className={cn("object-cover object-[70%_top]", fullScreen && "max-lg:object-[calc(50%-20px)_top]")}
+          className={cn(
+            "object-cover object-[70%_top]",
+            fullScreen && "max-lg:object-[calc(50%-20px)_top]",
+            imageClassName,
+          )}
         />
-        <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/30 to-transparent lg:from-(--heading-bg) lg:via-transparent lg:via-30%" />
+        <div
+          className={cn(
+            "absolute inset-0 bg-linear-to-r from-black/70 via-black/30 to-transparent lg:from-(--heading-bg) lg:via-transparent lg:via-30%",
+            !fullScreen && "sm:from-(--heading-bg) sm:via-transparent sm:via-30%",
+          )}
+        />
       </div>
       {content}
     </section>

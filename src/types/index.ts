@@ -19,7 +19,9 @@ export interface User {
   role: "USER" | "ADMIN" | "SUPER_ADMIN";
 }
 
-export type ProfileInput = Partial<Pick<User, "firstName" | "lastName" | "phone" | "profession">>;
+export type ProfileInput = Partial<
+  Pick<User, "firstName" | "lastName" | "phone" | "profession">
+>;
 
 export interface Tokens {
   accessToken: string;
@@ -51,7 +53,10 @@ export interface Booking {
   createdAt: string;
 }
 
-export type BookingInput = Pick<Booking, "startsAt" | "visitType" | "purpose"> & { comment?: string };
+export type BookingInput = Pick<
+  Booking,
+  "startsAt" | "visitType" | "purpose"
+> & { comment?: string };
 
 export interface BookingSchedule {
   timeZone: string;
@@ -74,9 +79,29 @@ export interface LoupeMagnification {
   use: string;
 }
 
-export interface LoupePage {
-  hero: { image: StaticImageData; background: string; intro: string; highlight: string };
+export interface ShowcaseHero {
+  hero: {
+    image: StaticImageData;
+    background: string;
+    intro: string;
+    highlight: string;
+  };
   stats: { value: string; label: string }[];
+}
+
+export interface ShowcaseFeature {
+  title: string;
+  image: StaticImageData;
+  subtitle?: string;
+  paragraphs?: string[];
+  points?: string[];
+}
+
+export interface LightPage extends ShowcaseHero {
+  features: ShowcaseFeature[];
+}
+
+export interface LoupePage extends ShowcaseHero {
   details: { image: StaticImageData; spots: LoupeHotspot[] }[];
   magnifications: LoupeMagnification[];
   viewer: { eyebrow: string; title: string; text: string };

@@ -9,6 +9,8 @@ import { OrderButton } from "@/components/product/OrderButton";
 import { OPTION_LABELS } from "@/constants/catalog";
 import { LOUPE_PAGES } from "@/constants/loupes";
 import { LoupeShowcase } from "@/components/loupe/LoupeShowcase";
+import { LIGHT_PAGES } from "@/constants/lightPages";
+import { LightShowcase } from "@/components/light/LightShowcase";
 import { PageHeading } from "@/components/sections/PageHeading";
 import { getCatalog, getProduct } from "@/api/catalog";
 import { OptionType } from "@/types";
@@ -49,13 +51,18 @@ const ProductContent = async ({
   })).find(({ values }) => values.length > 1);
 
   const loupePage = LOUPE_PAGES[product.slug];
-  const hero = loupePage?.hero;
+  const lightPage = LIGHT_PAGES[product.slug];
+  const hero = (loupePage ?? lightPage)?.hero;
 
   return (
     <>
       {hero && (
         <PageHeading
-          eyebrow={`ExamVision · ${product.subcategory.name} system`}
+          eyebrow={
+            lightPage
+              ? "ExamVision · LED light"
+              : `ExamVision · ${product.subcategory.name} system`
+          }
           title={product.name}
           image={hero.image}
           className={hero.background}
@@ -66,11 +73,15 @@ const ProductContent = async ({
                 Book a visit
               </ButtonLink>
               <ButtonLink
-                href={RouteEnum.CONFIGURATOR}
+                href={
+                  lightPage
+                    ? `${catalogSectionRoute(section)}#range`
+                    : RouteEnum.CONFIGURATOR
+                }
                 variant="outline"
                 className="border-white text-white hover:bg-white hover:text-ink"
               >
-                Configure in 3D
+                {lightPage ? "All lights" : "Configure in 3D"}
               </ButtonLink>
             </>
           }
@@ -81,9 +92,9 @@ const ProductContent = async ({
           </p>
         </PageHeading>
       )}
-      {loupePage ? (
-        <LoupeShowcase name={product.name} page={loupePage} />
-      ) : (
+      {loupePage && <LoupeShowcase name={product.name} page={loupePage} />}
+      {lightPage && <LightShowcase name={product.name} page={lightPage} />}
+      {!hero && (
         <Container className="py-8">
           <nav className="mb-6 text-xs text-muted">
             <Link href={RouteEnum.CATALOG}>Products</Link> /{" "}
@@ -95,14 +106,10 @@ const ProductContent = async ({
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
             <ProductGallery images={product.images} name={product.name} />
             <div className="flex flex-col gap-5">
-              {!hero && (
-                <>
-                  <Badge>ExamVision · {product.subcategory.name}</Badge>
-                  <h1 className="text-3xl font-semibold">{product.name}</h1>
-                  {product.description && (
-                    <p className="text-muted">{product.description}</p>
-                  )}
-                </>
+              <Badge>ExamVision · {product.subcategory.name}</Badge>
+              <h1 className="text-3xl font-semibold">{product.name}</h1>
+              {product.description && (
+                <p className="text-muted">{product.description}</p>
               )}
               {optionGroups.map(({ type, values }) => (
                 <div key={type}>

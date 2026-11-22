@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { Container } from "@/components/ui";
 import { FittingCta } from "@/components/sections/FittingCta";
+import { FeatureBlock } from "@/components/sections/FeatureBlock";
+import { ShowcaseStats } from "@/components/sections/ShowcaseStats";
 import { FITTING_STEPS } from "@/constants/loupes";
 import { LoupePage } from "@/types";
 import { cn } from "@/utils/cn";
@@ -19,23 +21,7 @@ export const LoupeShowcase = ({ name, page }: LoupeShowcaseProps) => {
   return (
     <>
       <div className="theme-dark">
-        <section className="border-b border-line">
-          <Container className="flex flex-col gap-10 py-16 sm:py-22">
-            <p className="text-xs tracking-widest text-muted uppercase">
-              In numbers
-            </p>
-            <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
-              {page.stats.map((stat) => (
-                <div key={stat.label}>
-                  <p className="text-4xl leading-tight font-light tabular-nums sm:text-[3.25rem]">
-                    {stat.value}
-                  </p>
-                  <p className="text-sm text-muted">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </Container>
-        </section>
+        <ShowcaseStats stats={page.stats} />
 
         <section className="border-b border-line">
           <Container className="flex flex-col gap-18 py-16 sm:py-22">
@@ -70,30 +56,12 @@ export const LoupeShowcase = ({ name, page }: LoupeShowcaseProps) => {
         </section>
 
         {page.light && (
-          <section className="border-b border-line">
-            <Container className="grid items-center gap-10 py-16 sm:py-22 lg:grid-cols-2 lg:gap-16">
-              <div className="relative aspect-4/3 overflow-hidden rounded-2xl bg-soft">
-                <Image
-                  src={page.light.image}
-                  alt={`${name} with an LED light`}
-                  fill
-                  unoptimized
-                  sizes="(min-width: 1024px) 50vw, 100vw"
-                  className="object-cover object-[50%_35%]"
-                />
-              </div>
-              <div className="flex flex-col gap-4.5">
-                <h2 className="text-4xl leading-tight font-light tracking-tight sm:text-6xl">
-                  Light where you need it
-                </h2>
-                {page.light.paragraphs.map((paragraph) => (
-                  <p key={paragraph} className="text-lg font-light text-muted">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            </Container>
-          </section>
+          <FeatureBlock
+            {...page.light}
+            title="Light where you need it"
+            alt={`${name} with an LED light`}
+            imageClassName="object-[50%_35%]"
+          />
         )}
 
         <section className="border-b border-line">
